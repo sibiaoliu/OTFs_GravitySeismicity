@@ -1,0 +1,17 @@
+# 定义一个OTF-FZ box。第一行: OTF的两个RTI点的索引，第一个RTI是靠近FZ的；第二行：width(与TF垂直的方向) length(沿TF方向的长度) (m); 第三行: 到TF的距离(m) 到Ridge的距离 (m)
+>> -Gred@90 -W1p,white
+2 1
+20E3 20E3
+10E3 10E3
+>> -Gcyan@90 -W1p,black
+2 1
+20E3 20E3
+-10E3 10E3
+>> -Gred@90 -W1p,white
+5 6
+20E3 20E3
+10E3 10E3
+>> -Gcyan@90 -W1p,black
+5 6
+20E3 20E3
+-10E3 10E3
