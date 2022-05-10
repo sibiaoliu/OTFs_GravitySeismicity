@@ -1,0 +1,6 @@
+OTFname,rheology,mean_thermal,OTF,FZ1,FZ2,MOR1,MOR2,IC1,OC1,IC2,OC2
+Oceanographer,hsc,66,2.8,7.7,3.6,-23.9,-24.9,-12.3,-10.3,-13.4,-12.4
+Oceanographer,isov,66,11.3,7.1,5.4,-13.4,-14.0,-2.2,-5.4,-3.2,-5.8
+Oceanographer,disl,66,9.8,8.4,8.8,-19.9,-18.6,-6.9,-8.5,-7.3,-5.7
+Oceanographer,vp,66,1.0,11.6,11.8,-20.4,-18.8,-11.4,-6.5,-10.8,-4.2
+Oceanographer,vep,66,0.9,11.7,11.9,-20.4,-18.8,-11.5,-6.4,-10.9,-4.1
