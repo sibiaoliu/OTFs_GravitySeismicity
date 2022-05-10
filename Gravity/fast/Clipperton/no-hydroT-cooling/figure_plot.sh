@@ -9,7 +9,8 @@
     mba=Results/${dataname}_mba.nc
     rmba=Results/${dataname}_rmba_vp.nc
     moho=Results/${dataname}_moho_vp.nc
-    gmt makecpt -C../../../basecpt_grav.cpt+h -T-30/30/10 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../basecpt_grav.cpt+h -T-35/30/10 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../roma.cpt+h -I -T-3/3/1 -Z >grav_moho.cpt
 
 function plotControlTransformFault()
 {
@@ -130,9 +131,9 @@ function shiftDatabyMean()
             move_x=`echo "$figwidth + $dx" | bc`
             gmt basemap -R$rmba -JM${figwidth}c -Ba -Bwsen -X${move_x}c #-Y${move_y}c
             gmt grdgradient $moho -A30 -Nt0.6 -Qc -G$moho.grad 
-            makecpt_grd_moho $moho ../../../roma.cpt
-            gmt grdimage $moho #-I$moho.grad
-            gmt colorbar -DJCB+o0/0.7c -Bx${afg_grav}+l"Relative crustal thickness" -By+l"km" -G-3/3 --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
+            #makecpt_grd_moho $moho ../../../roma.cpt
+            gmt grdimage $moho -Cgrav_moho.cpt
+            gmt colorbar -DJCB+o0/0.7c -Bx${afg_grav}+l"Relative crustal thickness" -By+l"km" -Cgrav_moho.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
             plotControlTransformFault $ROTF $OTF
             echo "(D)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
     gmt end show

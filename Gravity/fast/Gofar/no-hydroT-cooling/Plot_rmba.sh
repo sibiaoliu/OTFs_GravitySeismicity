@@ -9,8 +9,8 @@
     gmt makecpt -C../../../romaO.cpt+h -I -T-18/14/1 -Z >grav_diff.cpt
     gmt makecpt -C../../../romaO.cpt+h -I -T-4/10/1 -Z >grav_diff2.cpt
     gmt makecpt -C../../../roma.cpt+h -I -T-3/3/1 -Z >grav_moho.cpt
-    gmt makecpt -C../../../vikO.cpt+h -T-25/25/1 -Z >grav_therm.cpt
-    gmt makecpt -C../../../basecpt_grav.cpt+h -T-15/20/1 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../vikO.cpt+h -T-30/25/5 -Z >grav_therm.cpt
+    gmt makecpt -C../../../basecpt_grav.cpt+h -T-20/30/10 -Z >grav_rmba.cpt
 
 # Define paths & constants
     globalDataPath=/Users/sliu/Downloads/SLiu/Gitlab-thermalStructure-OTFs/GlobalData/
@@ -419,7 +419,7 @@ fi
         rmba=Results/${dataname}_rmba_${etaname}.nc
         gmt grdmath ${mba} $grav_therm_minusMeanValue SUB = ${fullrmba}
         # We shift RMBA with the same shift value in the hsc model (mean value)
-        gmt grdmath ${rmba} ${meanValue_OTF} SUB = ${rmba}
+        gmt grdmath ${fullrmba} ${meanValue_OTF} SUB = ${rmba}
         gmt grdgradient ${rmba} -A30 -Nt0.6 -Qc -G${rmba}.grad
         echo $meanValue_OTF >meanRMBA_${etaname}.txt
         # Moho

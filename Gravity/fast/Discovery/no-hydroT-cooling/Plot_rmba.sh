@@ -419,7 +419,7 @@ fi
         rmba=Results/${dataname}_rmba_${etaname}.nc
         gmt grdmath ${mba} $grav_therm_minusMeanValue SUB = ${fullrmba}
         # We shift RMBA with the same shift value in the hsc model (mean value)
-        gmt grdmath ${rmba} ${meanValue_OTF} SUB = ${rmba}
+        gmt grdmath ${fullrmba} ${meanValue_OTF} SUB = ${rmba}
         gmt grdgradient ${rmba} -A30 -Nt0.6 -Qc -G${rmba}.grad
         echo $meanValue_OTF >meanRMBA_${etaname}.txt
         # Moho
