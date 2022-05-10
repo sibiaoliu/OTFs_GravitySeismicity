@@ -1,0 +1,4 @@
+# jBL+w3c/3c+o0c/0c box name, index of OTF, location of box center (fraction of OTF, 0 at center, [-0.5, 0.5]), length of box (frac of OTF), width of box (km), rotation angle from OTF (degree), box color
+FZ1 1 -0.585 0.15 10 10 blue
+OTF1 1 0 0.9 10 0 red
+FZ2 1 0.585 0.15 10 5 blue
