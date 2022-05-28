@@ -5,12 +5,12 @@
     dataname=DuTroit
     #Clipperton, ChileRidge, Discovery, Marathon, Marion, Blanco, Oceanographer, Gofar, 
     #Garrett, Vlamingh, Atlantis, Clipperton, MarieCeleste, AtlantisII, Kane, DuTroit 
-    Etas=(hsc isov disl vp vep)
-    gmt makecpt -C../../../romaO.cpt+h -I -T-18/16/1 -Z >grav_diff.cpt
-    gmt makecpt -C../../../romaO.cpt+h -I -T-6/21/1 -Z >grav_diff2.cpt
+    Etas=(hsc isov disl vp vep_old)
+    gmt makecpt -C../../../romaO.cpt+h -I -T-20/12/1 -Z >grav_diff.cpt
+    gmt makecpt -C../../../romaO.cpt+h -I -T-2/20/1 -Z >grav_diff2.cpt
     gmt makecpt -C../../../roma.cpt+h -I -T-3/3/1 -Z >grav_moho.cpt
     gmt makecpt -C../../../vikO.cpt+h -T-45/30/10 -Z >grav_therm.cpt
-    gmt makecpt -C../../../basecpt_grav.cpt+h -T-55/65/10 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../basecpt_grav.cpt+h -T-60/70/10 -Z >grav_rmba.cpt
 
 # Define paths & constants
     globalDataPath=/Users/sliu/Downloads/SLiu/Gitlab-thermalStructure-OTFs/GlobalData/

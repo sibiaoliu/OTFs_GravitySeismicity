@@ -9,8 +9,8 @@
     gmt makecpt -C../../../romaO.cpt+h -I -T-18/18/1 -Z >grav_diff.cpt
     gmt makecpt -C../../../romaO.cpt+h -I -T-6/17/1 -Z >grav_diff2.cpt
     gmt makecpt -C../../../roma.cpt+h -I -T-3/3/1 -Z >grav_moho.cpt
-    gmt makecpt -C../../../vikO.cpt+h -T-50/35/5 -Z >grav_therm.cpt
-    gmt makecpt -C../../../basecpt_grav.cpt+h -T-50/75/10 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../vikO.cpt+h -T-60/30/5 -Z >grav_therm.cpt
+    gmt makecpt -C../../../basecpt_grav.cpt+h -T-50/80/10 -Z >grav_rmba.cpt
 
 # Define paths & constants
     globalDataPath=/Users/sliu/Downloads/SLiu/Gitlab-thermalStructure-OTFs/GlobalData/
