@@ -515,7 +515,7 @@ sed 's/[ ][ ]*/,/g' Results/averageThermal_${dataname}.txt > Results/averageTher
     model2=isov
     model3=v
     model4=vp
-      gmt begin Results/${dataname}_gravity_pattern2 pdf
+      gmt begin Results/${dataname}_gravity_pattern pdf
         gmt subplot begin 4x4 -A+JTL+o0.5c -Fs15c/9c -M0.5c/1.5c -R$faa -JM15c -Ba1df30m -BWSne -T"Gravity anomaly estimated from rheology-dependence thermal models: "$dataname
             gmt subplot set 0,0
                 modelname=$model1
