@@ -5,12 +5,12 @@
     dataname=Atlantis
     #Clipperton, ChileRidge, Discovery, Marathon, Marion, Blanco, Oceanographer, Gofar, 
     #Garrett, Vlamingh, Atlantis, Clipperton, MarieCeleste, AtlantisII, Kane, DuTroit 
-    Etas=(hsc isov disl vp vep)
-    gmt makecpt -C../../../romaO.cpt+h -T-14/34/1 -Z >grav_diff.cpt
-    gmt makecpt -C../../../romaO.cpt+h -T-4/9/1 -Z >grav_diff2.cpt
+    Etas=(hsc isov disl vp)
+    gmt makecpt -C../../../romaO.cpt+h -T-10/15/1 -Z >grav_diff.cpt
+    gmt makecpt -C../../../romaO.cpt+h -T-8/6/1 -Z >grav_diff2.cpt
     gmt makecpt -C../../../roma.cpt+h -I -T-3/3/1 -Z >grav_moho.cpt
-    gmt makecpt -C../../../vikO.cpt+h -T-50/20/5 -Z >grav_therm.cpt
-    gmt makecpt -C../../../basecpt_grav.cpt+h -T-30/60/10 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../vikO.cpt+h -T-50/35/5 -Z >grav_therm.cpt
+    gmt makecpt -C../../../basecpt_grav.cpt+h -T-30/55/10 -Z >grav_rmba.cpt
     
 # Define paths & constants
     globalDataPath=/Users/sliu/Downloads/SLiu/Gitlab-thermalStructure-OTFs/GlobalData/
@@ -392,7 +392,7 @@ fi
   # (3) getAverageBox_TF_FZ; (4)getAverageBox_Ridge; (5) getAverageBox_ICOC    
     echo "OTFname rheology RMBAshift OTF FZ1 FZ2 MOR1 MOR2 MOR3 MOR4 IC1 OC1 IC2 OC2" >Results/averageRMBA_${dataname}.txt
     echo "OTFname rheology mean_thermal OTF FZ1 FZ2 MOR1 MOR2 MOR3 MOR4 IC1 OC1 IC2 OC2" >Results/averageThermal_${dataname}.txt
-    echo "OTFname rheology OTF FZ1 FZ2 MOR1 MOR2 MOR3 MOR4 IC1 OC1 IC2 OC2 OTF_min OTF_max MOR1_min MOR1_max MOR2_min MOR2_max MOR3_min MOR3_max MOR4_min MOR4_max" >Results/averageMoho_${dataname}.txt
+   echo "OTFname rheology OTF FZ1 FZ2 MOR1 MOR2 MOR3 MOR4 IC1 OC1 IC2 OC2 OTF_min OTF_max MOR1_min MOR1_max MOR2_min MOR2_max MOR3_min MOR3_max MOR4_min MOR4_max" >Results/averageMoho_${dataname}.txt
     # we consider the hsc model as the reference model
     gravity_xyz2grd grav_hsc
     grav_therm_hsc=grav_hsc.nc
@@ -402,7 +402,7 @@ fi
     gmt grdmath ${mba} grav_therm_minusMeanValue_hsc.nc SUB = rmba_hsc.nc
     shiftDatabyMean rmba_hsc.nc
 
-    for i in {0..4}; do
+    for i in {0..3}; do
         #3.1 Calculate gravitational effect of rheology-dependence thermal model and then calculate the RMBA
         etaname=${Etas[i]}
         #Thermal gravity anomaly
@@ -553,9 +553,8 @@ sed 's/[ ][ ]*/,/g' Results/averageMoho_${dataname}.txt > Results/averageMoho_${
     model2=Isoviscous
     model3=Viscous
     model4=Visco-plastic
-    model5=Visco-elasto-plastic
       gmt begin Results/${dataname}_gravity_pattern pdf
-        gmt subplot begin 5x5 -A+JTL+o0.5c -Fs15c/9c -M0.5c/1.5c -R$faa -JM15c -Ba1df30m -BWSne -T"Gravity anomaly estimated from rheology-dependence thermal models: "$dataname
+        gmt subplot begin 5x4 -A+JTL+o0.5c -Fs15c/9c -M0.5c/1.5c -R$faa -JM15c -Ba1df30m -BWSne -T"Gravity anomaly estimated from rheology-dependence thermal models: "$dataname
             gmt subplot set 0,0
                 modelname=$model1
                 etaname=${Etas[0]}
@@ -589,16 +588,6 @@ sed 's/[ ][ ]*/,/g' Results/averageMoho_${dataname}.txt > Results/averageMoho_${
             gmt subplot set 0,3
                 modelname=$model4
                 etaname=${Etas[3]}
-                #Thermal gravity anomaly -vp
-                #makecpt_grd_basecpt grav_${etaname}_minusMean.nc
-                gmt grdimage grav_${etaname}_minusMean.nc -BwsEN -Cgrav_therm.cpt #-I${grav_therm_minusMeanValue}.grad
-                gmt grdcontour grav_${etaname}_minusMean.nc -C10
-                meanGrav=`awk '{printf "%.1f", $1}' meangrav_${etaname}.txt`
-                gmt colorbar -DJCB+o0/0.5c -Bxaf+l"$modelname (minus mean value $meanGrav mGal)" -By+l"mGal" -Cgrav_therm.cpt
-                plotControlTransformFault
-            gmt subplot set 0,4
-                modelname=$model5
-                etaname=${Etas[4]}
                 #Thermal gravity anomaly -vep
                 #makecpt_grd_basecpt grav_${etaname}_minusMean.nc
                 gmt grdimage grav_${etaname}_minusMean.nc -BwsEN -Cgrav_therm.cpt #-I${grav_therm_minusMeanValue}.grad
@@ -703,18 +692,6 @@ sed 's/[ ][ ]*/,/g' Results/averageMoho_${dataname}.txt > Results/averageMoho_${
                 #gmt grdcontour $rmba -C0, -Wathick,white,- -Wcthin,blue -A0,+f10p,Helvetica,white
                 shiftRMBA=`awk '{printf "%.1f", $1}' meanRMBA_${etaname}.txt`
                 gmt colorbar -DJCB+o0/0.5c -Bxaf+l"RMBA ($modelname) $shiftRMBA" -By+l"mGal" -Cgrav_rmba.cpt #-G${data_min}/${data_max}
-                plotControlTransformFault
-            gmt subplot set 1,4
-                modelname=$model5
-                etaname=${Etas[4]}
-                rmba=Results/${dataname}_rmba_${etaname}.nc
-                gmt basemap -BwseN -Ba 
-                #makecpt_grd $rmba
-                gmt grdimage $rmba -Cgrav_rmba.cpt #-I${rmba}.grad
-                #gmt grdcontour $rmba -C10
-                #gmt grdcontour $rmba -C0, -Wathick,white,- -Wcthin,blue -A0,+f10p,Helvetica,white
-                shiftRMBA=`awk '{printf "%.1f", $1}' meanRMBA_${etaname}.txt`
-                gmt colorbar -DJCB+o0/0.5c -Bxaf+l"RMBA ($modelname) $shiftRMBA" -By+l"mGal" -Cgrav_rmba.cpt #-G${data_min}/${data_max}
               # plot the all boxes
                 gmt plot ../inputs/averageBox_OTF1.lonlat -W0.5p,red -L -Gwhite@50
                 gmt plot ../inputs/averageBox_FZ1.lonlat -W0.5p,blue -L -Gwhite@50
@@ -796,15 +773,6 @@ sed 's/[ ][ ]*/,/g' Results/averageMoho_${dataname}.txt > Results/averageMoho_${
             gmt subplot set 2,3
                 modelname=$model4
                 etaname=${Etas[3]}
-                moho=Results/${dataname}_moho_${etaname}.nc
-                gmt basemap -BwseN -Ba 
-                gmt grdimage $moho -Cgrav_moho.cpt #-I${moho}.grad
-                #gmt grdcontour $moho -C0, -Wathick,white,- -Wcthin,blue -A0,+f10p,Helvetica,white
-                gmt colorbar -DJCB+o0/0.5c -Bxaf+l"Moho depth ($modelname) " -By+l"km" -Cgrav_moho.cpt #-G${data_min}/${data_max}
-                plotControlTransformFault
-            gmt subplot set 2,4
-                modelname=$model5
-                etaname=${Etas[4]}
                 moho=Results/${dataname}_moho_${etaname}.nc
                 gmt basemap -BwseN -Ba 
                 gmt grdimage $moho -Cgrav_moho.cpt #-I${moho}.grad
@@ -910,25 +878,10 @@ sed 's/[ ][ ]*/,/g' Results/averageMoho_${dataname}.txt > Results/averageMoho_${
                 plotControlTransformFault
             gmt subplot set 3,3
                 m1=$model1
-                m2=$model5
+                m2=$model4
                 grav_therm1=grav_${Etas[0]}.nc
-                grav_therm2=grav_${Etas[4]}.nc
-                grav_diff=rmba_diff_${Etas[4]}-${Etas[0]}.nc
-                gmt grdmath $grav_therm1 $grav_therm2 SUB = ${grav_diff}
-                gmt grdgradient $grav_diff -A30 -Nt0.6 -Qc -G${grav_diff}.grad
-                gmt grdimage $grav_diff -BWseN -Cgrav_diff.cpt #-I${grav_diff}.grad 
-                # gmt grdcontour $grav_diff -C1
-                gmt colorbar -DJCB+o0/0.5c -Bxaf+l"RMBA difference: $m2 - $m1" -By+l"mGal" -Cgrav_diff.cpt 
-                zmin=`gmt grdinfo $grav_diff | grep "v_min" | awk '{printf "%.1f", $3}'`
-                zmax=`gmt grdinfo $grav_diff | grep "v_max" | awk '{printf "%.1f", $5}'`
-                echo "min: $zmin mGal, max: $zmax mGal" | gmt text -F+cTL+f16,black -Dj1c/1c -Gwhite@20
-                plotControlTransformFault
-            gmt subplot set 3,4
-                m1=$model4
-                m2=$model5
-                grav_therm1=grav_${Etas[3]}.nc
-                grav_therm2=grav_${Etas[4]}.nc
-                grav_diff=rmba_diff_${Etas[4]}-${Etas[3]}.nc
+                grav_therm2=grav_${Etas[3]}.nc
+                grav_diff=rmba_diff_${Etas[3]}-${Etas[0]}.nc
                 gmt grdmath $grav_therm1 $grav_therm2 SUB = ${grav_diff}
                 gmt grdgradient $grav_diff -A30 -Nt0.6 -Qc -G${grav_diff}.grad
                 gmt grdimage $grav_diff -BWseN -Cgrav_diff.cpt #-I${grav_diff}.grad 
@@ -972,10 +925,11 @@ sed 's/[ ][ ]*/,/g' Results/averageMoho_${dataname}.txt > Results/averageMoho_${
                 echo "min: $zmin mGal, max: $zmax mGal" | gmt text -F+cTL+f16,black -Dj1c/1c -Gwhite@20               
                 plotControlTransformFault
             gmt subplot set 4,2
-                m1=$model2
-                m2=$model5
-                grav_therm1=grav_${Etas[1]}.nc
-                grav_therm2=grav_${Etas[4]}.nc
+                m1=$model3
+                m2=$model4
+                grav_therm1=grav_${Etas[2]}.nc
+                grav_therm2=grav_${Etas[3]}.nc
+                grav_diff=rmba_diff_${Etas[3]}-${Etas[2]}.nc
                 # RMBA_diff_disl-isov = grav_diff_isov-disl!
                 grav_diff=rmba_diff_${Etas[4]}-${Etas[1]}.nc
                 gmt grdmath $grav_therm1 $grav_therm2 SUB = ${grav_diff}
@@ -1001,22 +955,7 @@ sed 's/[ ][ ]*/,/g' Results/averageMoho_${dataname}.txt > Results/averageMoho_${
                 zmin=`gmt grdinfo $grav_diff | grep "v_min" | awk '{printf "%.1f", $3}'`
                 zmax=`gmt grdinfo $grav_diff | grep "v_max" | awk '{printf "%.1f", $5}'`
                 echo "min: $zmin mGal, max: $zmax mGal" | gmt text -F+cTL+f16,black -Dj1c/1c -Gwhite@20               
-                plotControlTransformFault
-            gmt subplot set 4,4
-                m1=$model3
-                m2=$model5
-                grav_therm1=grav_${Etas[2]}.nc
-                grav_therm2=grav_${Etas[4]}.nc
-                grav_diff=rmba_diff_${Etas[4]}-${Etas[2]}.nc
-                gmt grdmath $grav_therm1 $grav_therm2 SUB = ${grav_diff}
-                gmt grdgradient $grav_diff -A30 -Nt0.6 -Qc -G${grav_diff}.grad
-                gmt grdimage $grav_diff -BWseN -Cgrav_diff2.cpt #-I${grav_diff}.grad 
-                # gmt grdcontour $grav_diff -C1
-                gmt colorbar -DJCB+o0/0.5c -Bxaf+l"RMBA difference: $m2 - $m1" -By+l"mGal" -Cgrav_diff2.cpt 
-                zmin=`gmt grdinfo $grav_diff | grep "v_min" | awk '{printf "%.1f", $3}'`
-                zmax=`gmt grdinfo $grav_diff | grep "v_max" | awk '{printf "%.1f", $5}'`
-                echo "min: $zmin mGal, max: $zmax mGal" | gmt text -F+cTL+f16,black -Dj1c/1c -Gwhite@20               
-                plotControlTransformFault                                                        
+                plotControlTransformFault                                                   
         gmt subplot end
     gmt end show
 
