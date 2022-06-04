@@ -5,7 +5,7 @@
     dataname=Oceanographer
     #Clipperton, ChileRidge, Discovery, Marathon, Marion, Blanco, Oceanographer, Gofar, 
     #Garrett, Vlamingh, Atlantis, Clipperton, MarieCeleste, AtlantisII, Kane, DuTroit 
-    Etas=(hsc isov disl vp vep)
+    Etas=(hsc isov disl vp vep_old)
     gmt makecpt -C../../../romaO.cpt+h -I -T-15/10/1 -Z >grav_diff.cpt
     gmt makecpt -C../../../romaO.cpt+h -I -T-12/15/1 -Z >grav_diff2.cpt
     gmt makecpt -C../../../roma.cpt+h -I -T-3/3/1 -Z >grav_moho.cpt
