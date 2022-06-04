@@ -1,0 +1,17 @@
+# Define the IC & OC boxes. Row 1: index of the RTI; Row 2: width/length of the box; Row 3: Distances to the MOR and OTF (unit: m).
+>> -Gred@90 -W1p,white
+2 1
+20E3 20E3
+10E3 14E3
+>> -Gcyan@90 -W1p,black
+2 1
+20E3 20E3
+-10E3 14E3
+>> -Gred@90 -W1p,white
+3 4
+20E3 20E3
+10E3 14E3
+>> -Gcyan@90 -W1p,black
+3 4
+20E3 20E3
+-10E3 14E3
