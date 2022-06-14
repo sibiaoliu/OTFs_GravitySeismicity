@@ -9,10 +9,11 @@
     ROTF=../inputs/${dataname}_ridge_otf.txt
     mba=Results/${dataname}_mba.nc
     rmba=Results/${dataname}_rmba_${etaname}.nc
-    moho=Results/${dataname}_moho_${etaname}.nc
-    gmt makecpt -C../../../basecpt_MBA.cpt+h -T-50/60/2 -Z >grav_mba.cpt
-    gmt makecpt -C../../../basecpt_grav.cpt+h -T-30/60/10 -Z >grav_rmba.cpt
-    gmt makecpt -C../../../romaO.cpt+h -T-3/3/1 -Z >grav_moho.cpt
+    #moho=Results/${dataname}_moho_${etaname}.nc
+    faa=../inputs/${dataname}_faa.nc
+    gmt makecpt -C../../../basecpt_MBA.cpt+h -T-60/50/10 -Z >grav_mba.cpt
+    gmt makecpt -C../../../basecpt_grav.cpt+h -T-30/50/10 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../romaO.cpt+h -T-40/70/10 -Z >grav_faa.cpt
 
 function plotControlTransformFault()
 {
@@ -87,7 +88,7 @@ function shiftDatabyMean()
 }
 
 # Plot the figure, including
-    # 1. Bathymetry, 2. MBA, 3. RMBA 4. Moho
+    # 1. Bathymetry, 2. FAA, 3. MBA, 4. RMBA
     gmt gmtset FONT_ANNOT_PRIMARY=7p
     gmt gmtset FONT_LABEL=7p
     figwidth=7
@@ -95,12 +96,12 @@ function shiftDatabyMean()
     move_x=10
     move_y=10
     dx=0.5
-    dy=2
+    dy=2.5
     gmt gmtset MAP_FRAME_WIDTH=2p
     cpt_bathy=bathy.cpt
     gmt grd2cpt $bathy_ship -C../../../basecpt_bathy.cpt -Z >$cpt_bathy
-    cpt_moho=moho.cpt
-    gmt grd2cpt $moho -C../../../romaO.cpt -Z >$cpt_moho
+    #cpt_moho=moho.cpt
+    #gmt grd2cpt $moho -C../../../romaO.cpt -Z >$cpt_moho
     afg_grav=a10f5
     contours_grav="-40,-30,-20,-10,0,10,20,30,40"
     grid_mask=tmp_mask.nc
@@ -128,9 +129,20 @@ function shiftDatabyMean()
             gmt colorbar -DJCB+o0/0.6c -Bxaf+l"Bathymetry" -By+l"km" -C$cpt_bathy -W-0.001 --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
             plotControlTransformFault $ROTF $OTF
             echo "(A)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
-        # MBA
+        # FAA
             move_x=`echo "$figwidth + $dx" | bc`
             gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c #-Y${move_y}c
+            gmt grdimage $faa -Cgrav_faa.cpt #-Imbashift.grad
+            if [ -f $grid_mask ]; then 
+                gmt grdimage $grid_mask -Cbathy.cpt -Q # -t$alpha_mask
+            fi
+            gmt colorbar -DJCB+o0/0.6c -Bx${afg_grav}+l"FAA" -By+l"mGal" -Cgrav_faa.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
+            #plotControlTransformFault $ROTF $OTF
+            echo "(B)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite         
+        # MBA
+            move_x=`echo "- $figwidth - $dx" | bc`
+            move_y=`echo "-$figheight - $dy" | bc`
+            gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c -Y${move_y}c
             shiftDatabyMean $mba mbashift.nc
             #gmt grdgradient mbashift.nc -A10 -Nt1 -Qc -Gmbashift.grad
             gmt grdimage mbashift.nc -Q -Cgrav_mba.cpt #-Imbashift.grad
@@ -138,29 +150,17 @@ function shiftDatabyMean()
                 gmt grdimage $grid_mask -Cbathy.cpt -Q # -t$alpha_mask
             fi
             gmt colorbar -DJCB+o0/0.6c -Bx${afg_grav}+l"MBA" -By+l"mGal" -Cgrav_mba.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
-            plotControlTransformFault $ROTF $OTF
-            echo "(B)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
+            #plotControlTransformFault $ROTF $OTF
+            echo "(C)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
         # RMBA
-            move_x=`echo "- $figwidth - $dx" | bc`
-            move_y=`echo "-$figheight - $dy" | bc`
-            gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c -Y${move_y}c
+            move_x=`echo "$figwidth + $dx" | bc`
+            gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c #-Y${move_y}c
             gmt grdimage $rmba -Cgrav_rmba.cpt -Q
             if [ -f $grid_mask ]; then 
                 gmt grdimage $grid_mask -Cbathy.cpt -Q # -t$alpha_mask
             fi
             gmt colorbar -DJCB+o0/0.6c -Bx${afg_grav}+l"RMBA" -By+l"mGal" -Cgrav_rmba.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
-            plotControlTransformFault $ROTF $OTF
-            echo "(C)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
-        # Moho            
-            move_x=`echo "$figwidth + $dx" | bc`
-            gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c #-Y${move_y}c
-            gmt grdgradient $moho -A30 -Nt0.6 -Qc -G$moho.grad 
-            gmt grdimage $moho -Cgrav_moho.cpt -Q
-            if [ -f $grid_mask ]; then 
-                gmt grdimage $grid_mask -Cbathy.cpt -Q # -t$alpha_mask
-            fi
-            gmt colorbar -DJCB+o0/0.6c -Bx${afg_grav}+l"Relative crustal thickness" -By+l"km" -Cgrav_moho.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
-            plotControlTransformFault $ROTF $OTF
+            #plotControlTransformFault $ROTF $OTF
             echo "(D)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
     gmt end show
 rm gmt.* tmp_mask.nc mbashift.nc *.cpt Results/*.grad
