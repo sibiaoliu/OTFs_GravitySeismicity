@@ -14,7 +14,7 @@
     gmt makecpt -C../../../basecpt_MBA.cpt+h -T-35/20/5 -Z >grav_mba.cpt
     gmt makecpt -C../../../basecpt_grav.cpt+h -T-35/25/5 -Z >grav_rmba.cpt
     #gmt makecpt -C../../../romaO.cpt+h -T-2/2/0.5 -Z >grav_moho.cpt
-    gmt makecpt -C../../../romaO.cpt+h -T-15/20/5 -Z >grav_faa.cpt
+    gmt makecpt -C../../../romaO.cpt+h -T-20/15/5 -Z >grav_faa.cpt
 
 
 function plotControlTransformFault()
@@ -70,16 +70,6 @@ function makecpt_grd_basecpt()
         gmt makecpt -C${basecpt}+h -T${cpt_min}/${cpt_max}
     fi   
 }
-function makecpt_grd_moho()
-{
-    grdfile=$1
-    masterCPT_grav=$2 #../../../basecpt_grav.cpt
-    data_min=`gmt grdinfo $grdfile | grep "v_min" | awk '{printf "%.1f", $3}'`
-    data_max=`gmt grdinfo $grdfile | grep "v_max" | awk '{printf "%.1f", $5}'`
-    cpt_min=`echo ${data_min} | awk '{printf "%.1f", $1}'`
-    cpt_max=`echo ${data_max} | awk '{printf "%.1f", $1}'`
-    gmt makecpt -Iz -C${masterCPT_grav}+h -T-3.0/3.0
-}
 function shiftDatabyMean()
 {
     grd_data=$1
@@ -97,7 +87,7 @@ function shiftDatabyMean()
     move_x=10
     move_y=10
     dx=0.5
-    dy=2.5
+    dy=1.7
     gmt gmtset MAP_FRAME_WIDTH=2p
     cpt_bathy=bathy.cpt
     gmt grd2cpt $bathy_ship -C../../../basecpt_bathy.cpt -Z >$cpt_bathy
@@ -129,7 +119,7 @@ function shiftDatabyMean()
             fi
             gmt colorbar -DJCB+o0/0.6c -Bxaf+l"Bathymetry" -By+l"km" -C$cpt_bathy -W-0.001 --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
             plotControlTransformFault $ROTF $OTF
-            echo "(A)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
+            echo "(a)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
         # FAA
             move_x=`echo "$figwidth + $dx" | bc`
             gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c #-Y${move_y}c
@@ -139,7 +129,7 @@ function shiftDatabyMean()
             fi
             gmt colorbar -DJCB+o0/0.6c -Bx${afg_grav}+l"FAA" -By+l"mGal" -Cgrav_faa.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
             #plotControlTransformFault $ROTF $OTF
-            echo "(B)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite         
+            echo "(b)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite         
         # MBA
             move_x=`echo "- $figwidth - $dx" | bc`
             move_y=`echo "-$figheight - $dy" | bc`
@@ -152,7 +142,7 @@ function shiftDatabyMean()
             fi
             gmt colorbar -DJCB+o0/0.6c -Bx${afg_grav}+l"MBA" -By+l"mGal" -Cgrav_mba.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
             #plotControlTransformFault $ROTF $OTF
-            echo "(C)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
+            echo "(c)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
         # RMBA
             move_x=`echo "$figwidth + $dx" | bc`
             gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c #-Y${move_y}c
@@ -162,6 +152,6 @@ function shiftDatabyMean()
             fi
             gmt colorbar -DJCB+o0/0.6c -Bx${afg_grav}+l"RMBA" -By+l"mGal" -Cgrav_rmba.cpt --MAP_FRAME_PEN=0.5p --MAP_TICK_LENGTH_PRIMARY=1p
             #plotControlTransformFault $ROTF $OTF
-            echo "(D)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
+            echo "(d)" | gmt text -F+cTL+f12p,Helvetica-Bold -Dj0.1c/0.1 -Gwhite
     gmt end show
 rm gmt.* tmp_mask.nc mbashift.nc *.cpt Results/*.grad
