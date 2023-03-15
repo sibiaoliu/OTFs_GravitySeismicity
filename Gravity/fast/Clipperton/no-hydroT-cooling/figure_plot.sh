@@ -3,19 +3,20 @@
 
 #===== Input parameters' value change=====
     dataname=Clipperton
-    etaname=isov
+    etaname=vp
     bathy_ship=../inputs/${dataname}_ship.nc
+    bathy_large_ship=../inputs/${dataname}_large_ship.nc
     OTF=../inputs/${dataname}_OTF.txt
     ROTF=../inputs/${dataname}_ridge_otf.txt
     mba=Results/${dataname}_mba.nc
     rmba=Results/${dataname}_rmba_${etaname}.nc
+    fullrmba=Results/${dataname}_fullrmba_${etaname}.nc
     #moho=Results/${dataname}_moho_${etaname}.nc
     faa=../inputs/${dataname}_faa.nc    
-    gmt makecpt -C../../../basecpt_MBA.cpt+h -T-35/20/5 -Z >grav_mba.cpt
-    gmt makecpt -C../../../basecpt_grav.cpt+h -T-35/25/5 -Z >grav_rmba.cpt
+    gmt makecpt -C../../../basecpt_MBA.cpt+h -I -T-45/20/1 -Z >grav_mba.cpt
+    gmt makecpt -C../../../basecpt_grav.cpt+h -T-35/20/1 -Z >grav_rmba.cpt
     #gmt makecpt -C../../../romaO.cpt+h -T-2/2/0.5 -Z >grav_moho.cpt
-    gmt makecpt -C../../../romaO.cpt+h -T-20/15/5 -Z >grav_faa.cpt
-
+    gmt makecpt -C../../../romaO.cpt+h -I -T-20/20/1 -Z >grav_faa.cpt
 
 function plotControlTransformFault()
 {
@@ -77,6 +78,7 @@ function shiftDatabyMean()
     meanValue=`gmt grdmath ${grd_data} MEAN = tmp.nc && gmt grd2xyz tmp.nc | awk 'NR==1{printf "%.0f", $3}' && rm tmp.nc`
     gmt grdmath ${grd_data} ${meanValue} SUB = ${grd_data_shift}
     str_shiftData=", shift ${meanValue} mGal"
+    echo $str_shiftData
 }
 # Plot the figure, including
     # 1. Bathymetry, 2. FAA, 3. MBA, 4. RMBA
@@ -146,6 +148,7 @@ function shiftDatabyMean()
         # RMBA
             move_x=`echo "$figwidth + $dx" | bc`
             gmt basemap -R$range_small -JM${figwidth}c -Ba -Bwsen -X${move_x}c #-Y${move_y}c
+            #gmt grdimage $fullrmba -Cgrav_rmba.cpt -Q
             gmt grdimage $rmba -Cgrav_rmba.cpt -Q
             if [ -f $grid_mask ]; then 
                 gmt grdimage $grid_mask -Cbathy.cpt -Q # -t$alpha_mask

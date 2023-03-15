@@ -1,0 +1,5 @@
+OTFname,rheology,RMBAshift,OTF,FZ1,FZ2,MOR1,MOR2,IC1,OC1,IC2,OC2
+Clipperton,hsc,35,18.4,-4.2,4.4,10.0,23.2,14.2,-4.6,26.5,17.2
+Clipperton,isov,35,12.4,-4.9,3.4,7.5,20.8,11.3,-6.0,23.1,15.9
+Clipperton,disl,35,15.2,-4.5,3.8,9.3,22.6,13.6,-4.9,25.3,17.1
+Clipperton,vp,35,18.0,-5.0,4.1,9.4,23.0,14.3,-5.1,26.3,17.3
